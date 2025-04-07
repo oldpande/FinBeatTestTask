@@ -1,9 +1,8 @@
-﻿
-using NLog;
+﻿using NLog;
 
 namespace FinBeatTestTask.Middlewares;
 
-public class RequestResponseLoggingMiddleware : IMiddleware
+public class RequestResponseLoggingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -13,7 +12,7 @@ public class RequestResponseLoggingMiddleware : IMiddleware
         _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context)
     {
         // Логируем запрос
         var request = await FormatRequest(context.Request);

@@ -11,12 +11,14 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Services.AddMemoryCache();
+
     builder.Services.AddControllers();
-
-    builder.Services.AddDbContext<CodeDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
     builder.Services.AddTransient<ICodeService, CodeService>();
-    //builder.Services.AddTransient<ICodeRepository, CodeRepository>();
+    builder.Services.AddTransient<ICodeRepository, CodeRepository>();
+
+    //миграция добавлена, потому что предпочитаю Code first, и чтобы логику приложения не размазывать на разные уровни
+    builder.Services.AddDbContext<CodeDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     var app = builder.Build();
 
