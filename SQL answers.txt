@@ -1,0 +1,26 @@
+2.1)
+SELECT "c"."Id", "c"."ClientName", COUNT("cc"."Id") AS ContactCount
+FROM "Clients" AS c
+LEFT JOIN "ClientContacts" AS cc ON "c"."Id" = "cc"."ClientId"
+GROUP BY "c"."ClientName", "c"."Id"
+ORDER BY "c"."Id";
+
+
+2.2)
+SELECT "c"."Id", "c"."ClientName", COUNT("cc"."Id") AS "ContactCount"
+FROM "Clients" AS c
+LEFT JOIN "ClientContacts" AS cc ON "c"."Id" = "cc"."ClientId"
+GROUP BY "c"."ClientName", "c"."Id"
+HAVING COUNT("cc"."Id") > 2
+ORDER BY "c"."Id";
+
+
+3)
+WITH OrderedDates AS (
+    SELECT "Id", "Dt", LAG("Dt") OVER (PARTITION BY "Id" ORDER BY "Dt") AS "PrevDt"
+    FROM "Dates"
+)
+SELECT "Id", "PrevDt" AS SD, "Dt" AS ED
+FROM OrderedDates
+WHERE "PrevDt" IS NOT NULL
+ORDER BY "Id", SD;
